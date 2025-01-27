@@ -38,26 +38,29 @@ class BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      selectedItemColor: Colors.white,
-      backgroundColor: Theme.of(context).colorScheme.secondary,
-      // selectedIconTheme: IconThemeData(color: Color(0xFF5BCEFA)),
-      items: <BottomNavigationBarItem>[
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
-        ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-        ),
-      ],
-      currentIndex: currentIndex,
-      onTap: onItemTapped,
+    return Container(
+      color: Theme.of(context).colorScheme.secondary,
+      child: BottomNavigationBar(
+        // selectedItemColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        items: <BottomNavigationBarItem>[
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Recent Jobs',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: currentIndex,
+        onTap: onItemTapped,
+        type: BottomNavigationBarType.fixed,
+      ),
     );
   }
 }

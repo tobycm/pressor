@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pressor/components/buttons/pick_video.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,19 +18,19 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Welcome to Pressor'),
-          ElevatedButton(
-            onPressed: () async {
-              final XFile? video =
-                  await _picker.pickVideo(source: ImageSource.gallery);
-              setState(() {
-                _video = video;
-              });
-            },
-            child: const Text('Pick a video'),
+          Text(
+            "Welcome to Pressor",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 60,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           ),
-          if (_video != null) Text('Video: ${_video!.path}'),
+          const PickVideo()
         ],
       ),
     );

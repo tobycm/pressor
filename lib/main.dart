@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pressor/components/bottom_nav_bar.dart';
+import 'package:pressor/pages/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,14 +14,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pressor',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            brightness: Brightness.light,
-            seedColor: Colors.white,
-            primary: Color(0xFF5BCEFA),
-            secondary: Color(0xFFF5A9B8),
-            surface: Colors.white),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(
+              brightness: Brightness.light,
+              seedColor: Colors.white,
+              primary: Color(0xFF5BCEFA),
+              surface: Color(0xFFF5A9B8),
+              secondary: Colors.white,
+              onSurface: Colors.white),
+          useMaterial3: true,
+          textTheme: const TextTheme()),
       home: const MyHomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -35,13 +37,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget page = const Center(
-    child: Text('Welcome to Pressor'),
-  );
+  Widget page = const Home();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: page,
       bottomNavigationBar: BottomNavBar(
         setPage: (page) => {
@@ -50,6 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
           })
         },
       ),
-    );
+    ));
   }
 }
