@@ -1,4 +1,4 @@
 platform :ios, '14.0'
 inhibit_all_warnings!
 workspace './Runner.xcworkspace'
-pod 'ffmpeg-kit-ios-full', '6.0'
+pod 'ffmpeg-kit-ios-full-gpl', '4.5.1'
