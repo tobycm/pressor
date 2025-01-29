@@ -33,7 +33,7 @@ jobs:
 
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
-        run: flutter build ipa --release
+        run: flutter build ipa --release --no-codesign
 
       - name: Zip artifact folder
         run: zip -r artifacts.zip build/ios/
