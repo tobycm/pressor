@@ -34,11 +34,11 @@ jobs:
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
         run: flutter build ipa --release --no-codesign
-
+    
       # Collect the file and upload as artifact
       - name: collect ipa artifacts
         uses: actions/upload-artifact@v3
         with:
           name: release-ipa
           # Path to the release files
-          path: build/ios/ipa/*.app
+          path: build/ios/iphoneos/*.app
