@@ -19,6 +19,9 @@ jobs:
       # Install your project's dependencies
       - run: flutter pub get
 
+      - name: Install CocoaPods dependencies
+        run: cd ios && pod install
+
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
         run: flutter build ipa --release --no-codesign
