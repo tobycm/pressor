@@ -29,20 +29,20 @@ jobs:
       - name: Building IPA
         run: flutter build ipa --release --no-codesign
 
-      - name: Change directory
-        run: cd build/ios/
+      # - name: Create artifacts folder
+      #   run: mkdir -p build/ios/Payload
 
-      - name: Create artifacts folder
-        run: mkdir -p Payload
+      # - name: Copy the ipa to the artifacts folder
+      #   run: cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app build/ios/Payload/
 
-      - name: Copy the ipa to the artifacts folder
-        run: cp -r archive/Runner.xcarchive/Products/Applications/Runner.app Payload/
+      # - name: Zip artifact folder
+      #   run: cd build/ios/ & zip -r artifacts.zip Payload/
 
-      - name: Zip artifact folder
-        run: zip -r artifacts.zip Payload/
+      # - name: Rename the zip file
+      #   run: mv artifacts.zip Pressor.ipa
 
-      - name: Rename the zip file
-        run: mv artifacts.zip Pressor.ipa
+      - name: Zip all
+        run: zip -r artifacts.zip build/ios/
 
       # Collect the file and upload as artifact
       - name: collect ipa artifacts
@@ -50,4 +50,4 @@ jobs:
         with:
           name: release-ipa
           # Path to the release files
-          path: build/ios/Pressor.ipa
+          path: artifacts.zip
