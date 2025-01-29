@@ -12,9 +12,9 @@ jobs:
 
       # Install flutter
       - name: Flutter get
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: "2.10.1"
+          flutter-version: "3.27.3"
 
       # Install your project's dependencies
       - run: flutter pub get
