@@ -1,6 +1,4 @@
 platform :ios, '14.0'
 inhibit_all_warnings!
 workspace './Runner.xcworkspace'
-use_frameworks!
-use_modular_headers!
- pod 'ffmpeg_kit_flutter_full_gpl', :path => '.symlinks/plugins/ffmpeg_kit_flutter_full_gpl/ios'
+pod 'ffmpeg-kit-ios-full', '6.0'
