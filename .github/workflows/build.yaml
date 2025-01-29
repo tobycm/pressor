@@ -29,10 +29,13 @@ jobs:
       - name: Building IPA
         run: flutter build ipa --release
 
+      - name: Zip artifact folder
+        run: zip -r artifacts.zip build/ios/
+
       # Collect the file and upload as artifact
       - name: collect ipa artifacts
         uses: actions/upload-artifact@v3
         with:
           name: release-ipa
           # Path to the release files
-          path: build/ios/ipa/*.ipa
+          path: artifacts.zip
