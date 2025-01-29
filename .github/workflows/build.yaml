@@ -27,10 +27,22 @@ jobs:
 
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
-        run: flutter build ipa --release
+        run: flutter build ipa --release --no-codesign
+
+      - name: Change directory
+        run: cd build/ios/
+
+      - name: Create artifacts folder
+        run: mkdir -p Payload
+
+      - name: Copy the ipa to the artifacts folder
+        run: cp -r archive/Runner.xcarchive/Products/Applications/Runner.app Payload/
 
       - name: Zip artifact folder
-        run: zip -r artifacts.zip build/ios/
+        run: zip -r artifacts.zip Payload/
+
+      - name: Rename the zip file
+        run: mv artifacts.zip Pressor.ipa
 
       # Collect the file and upload as artifact
       - name: collect ipa artifacts
@@ -38,4 +50,4 @@ jobs:
         with:
           name: release-ipa
           # Path to the release files
-          path: artifacts.zip
+          path: build/ios/Pressor.ipa
