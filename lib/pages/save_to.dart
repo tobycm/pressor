@@ -53,13 +53,15 @@ class _SaveToState extends State<SaveTo> {
                     widget.compressContext.destinationFolder = path;
                   });
                 },
-                child: const Text('Pick destination folder'),
+                child: const Text('Pick destination folder',
+                    style: TextStyle(fontSize: 24)),
               ),
 
             if (widget.compressContext.destinationFolder != null) ...[
               Padding(padding: const EdgeInsets.all(10)),
               Text(
-                  'Destination folder: ${widget.compressContext.destinationFolder!.split("/").last}'),
+                  'Destination folder: ${widget.compressContext.destinationFolder!.split("/").last}',
+                  style: TextStyle(fontSize: 24)),
               Padding(padding: const EdgeInsets.all(10)),
               ElevatedButton(
                 style: BlueButton(context),
@@ -70,7 +72,7 @@ class _SaveToState extends State<SaveTo> {
                         Review(compressContext: widget.compressContext),
                   ),
                 ),
-                child: const Text('Next'),
+                child: const Text('Next', style: TextStyle(fontSize: 24)),
               ),
             ],
           ],

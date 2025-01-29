@@ -107,7 +107,7 @@ class _CompressOptionsState extends State<CompressOptions> {
                     ),
                   ),
                   style: BlueButton(context),
-                  child: const Text('Next'),
+                  child: const Text('Next', style: TextStyle(fontSize: 24)),
                 ),
               ],
             ),

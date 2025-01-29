@@ -3,6 +3,10 @@ import 'package:image_picker/image_picker.dart';
 
 class CompressContext {
   final XFile video;
+  String get name => video.name;
+  String nameWithoutExtension() {
+    return name.substring(0, name.lastIndexOf('.'));
+  }
 
   final CompressSettings settings = CompressSettings();
 
@@ -43,10 +47,14 @@ class CompressSettings {
 }
 
 Future<FFmpegSession> startCompressSession(CompressContext context) async {
-  var output = "${context.destinationFolder}/${context.video.name}.mp4";
+  var output =
+      "${context.destinationFolder}/${context.nameWithoutExtension()}.mp4";
+
+  print(context.video.path);
 
   return await FFmpegSession.create([
     "-i",
+    // '"${context.video.path}"',
     context.video.path,
     if (context.settings.resolution != null) ...[
       "-vf",
@@ -60,6 +68,7 @@ Future<FFmpegSession> startCompressSession(CompressContext context) async {
       "-r",
       "${context.settings.fps}",
     ],
+    // '"$output"',
     output,
   ]);
 }

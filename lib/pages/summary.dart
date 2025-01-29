@@ -61,7 +61,8 @@ class Review extends StatelessWidget {
                       (route) => route.isFirst,
                     )
                   },
-                  child: const Text("Start compression"),
+                  child: const Text("Start compression",
+                      style: TextStyle(fontSize: 24)),
                 ),
               ),
             ],

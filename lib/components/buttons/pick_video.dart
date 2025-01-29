@@ -24,6 +24,8 @@ class _PickVideoState extends State<PickVideo> {
 
         if (!context.mounted || video == null) return;
 
+        print(video.path);
+
         Navigator.push(
           context,
           MaterialPageRoute(
