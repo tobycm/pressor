@@ -41,9 +41,6 @@ jobs:
       - name: Rename the zip file
         run: mv build/ios/artifacts.zip Pressor.ipa
 
-      - name: Zip all
-        run: zip -r artifacts.zip build/ios/
-
       # Collect the file and upload as artifact
       - name: collect ipa artifacts
         uses: actions/upload-artifact@v3
