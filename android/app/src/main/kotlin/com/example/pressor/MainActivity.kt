@@ -1,4 +1,4 @@
-package com.example.pressor
+package dev.tobycm.pressor
 
 import io.flutter.embedding.android.FlutterActivity
 
