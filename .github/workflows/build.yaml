@@ -1,0 +1,32 @@
+name: "[DEV] Build and Publish iOS"
+on: workflow_dispatch
+
+jobs:
+  # Build job
+  build:
+    runs-on: macos-latest
+    steps:
+      # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Install flutter
+      - name: Flutter get
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "2.10.1"
+
+      # Install your project's dependencies
+      - run: flutter pub get
+
+      # Build and sign the ipa using a single flutter command
+      - name: Building IPA
+        run: flutter build ipa --release --no-codesign
+
+      # Collect the file and upload as artifact
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-ipa
+          # Path to the release files
+          path: build/ios/ipa/*.ipa
