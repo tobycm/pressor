@@ -1,4 +1,8 @@
 import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_session.dart';
+import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_session_complete_callback.dart';
+import 'package:ffmpeg_kit_flutter_full_gpl/log_callback.dart';
+import 'package:ffmpeg_kit_flutter_full_gpl/log_redirection_strategy.dart';
+import 'package:ffmpeg_kit_flutter_full_gpl/statistics_callback.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CompressContext {
@@ -6,6 +10,26 @@ class CompressContext {
   String get name => video.name;
   String nameWithoutExtension() {
     return name.substring(0, name.lastIndexOf('.'));
+  }
+
+  String outputPath() {
+    var output = "$destinationFolder/${nameWithoutExtension()}";
+
+    if (settings.resolution != null) {
+      output += "_${settings.resolution!.name}";
+    }
+
+    if (settings.bitrate != null) {
+      output += "_${settings.bitrate}k";
+    }
+
+    if (settings.fps != null) {
+      output += "_${settings.fps}fps";
+    }
+
+    output += ".mp4";
+
+    return output;
   }
 
   final CompressSettings settings = CompressSettings();
@@ -46,13 +70,17 @@ class CompressSettings {
   });
 }
 
-Future<FFmpegSession> startCompressSession(CompressContext context) async {
-  var output =
-      "${context.destinationFolder}/${context.nameWithoutExtension()}.mp4";
-
-  print(context.video.path);
+Future<FFmpegSession> startCompressSession(CompressContext context,
+    [FFmpegSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+    StatisticsCallback? statisticsCallback,
+    LogRedirectionStrategy? logRedirectionStrategy]) async {
+  // return await FFmpegSession.create([
+  //   "-version",
+  // ]);
 
   return await FFmpegSession.create([
+    "-y",
     "-i",
     // '"${context.video.path}"',
     context.video.path,
@@ -68,7 +96,7 @@ Future<FFmpegSession> startCompressSession(CompressContext context) async {
       "-r",
       "${context.settings.fps}",
     ],
-    // '"$output"',
-    output,
-  ]);
+    // '"${context.outputName()}"',
+    context.outputPath(),
+  ], completeCallback, logCallback, statisticsCallback, logRedirectionStrategy);
 }

@@ -30,12 +30,12 @@ class Review extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Video file: ${compressContext.video.path.split("/").last}",
+                "Output video file: ${compressContext.outputPath()}",
               ),
               const Padding(padding: EdgeInsets.all(8)),
-              Text(
-                "Destination folder: ${compressContext.destinationFolder!.split("/").last}",
-              ),
+              // Text(
+              //   "Destination folder: ${compressContext.destinationFolder!.split("/").last}",
+              // ),
               Text(
                 "Resolution: ${compressContext.settings.resolution ?? "Unchanged"}",
               ),

@@ -2,6 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Pressor needs access to your photo library to compress video locally.</string>
+
+		<!-- gal: Required -->
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Pressor needs access to your photo library to save the compressed result.</string>
+		<!-- gal: Required -->
+
+
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
@@ -45,7 +55,5 @@
 		<true />
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true />
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Pressor needs access to your photo library to compress video locally.</string>
 	</dict>
 </plist>

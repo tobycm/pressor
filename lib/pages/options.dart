@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pressor/components/buttons/blue.dart';
 import 'package:pressor/compress.dart';
 import 'package:pressor/pages/save_to.dart';
+import 'package:pressor/pages/summary.dart';
 
 class CompressOptions extends StatefulWidget {
   final CompressContext compressContext;
@@ -99,13 +102,41 @@ class _CompressOptionsState extends State<CompressOptions> {
                 ),
                 Padding(padding: const EdgeInsets.all(10)),
                 ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          SaveTo(compressContext: widget.compressContext),
-                    ),
-                  ),
+                  onPressed: () {
+                    if (Platform.isIOS || Platform.isAndroid) {
+                      widget.compressContext.destinationFolder =
+                          Directory.systemTemp.path;
+                    }
+
+                    var to = Platform.isIOS || Platform.isAndroid
+                        ? Review(compressContext: widget.compressContext)
+                        : SaveTo(compressContext: widget.compressContext);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => to),
+                    );
+
+                    // if (!Platform.isIOS) {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>
+                    //           SaveTo(compressContext: widget.compressContext),
+                    //     ),
+                    //   );
+                    // } else {
+                    //   widget.compressContext.destinationFolder =
+                    //       Directory.systemTemp.path;
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>
+                    //           Review(compressContext: widget.compressContext),
+                    //     ),
+                    //   );
+                    // }
+                  },
                   style: BlueButton(context),
                   child: const Text('Next', style: TextStyle(fontSize: 24)),
                 ),
