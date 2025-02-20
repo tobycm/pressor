@@ -4,73 +4,80 @@
 
 A powerful yet easy-to-use video compression app built with Flutter.
 
-## 🌟 Features
+## Features
 
-- ✅ **Clean and Appealing UI** – Modern and intuitive design
-- ✅ **Easy to Navigate UX** – Smooth and user-friendly experience
-- ✅ **Cross-Platform Support** – Works on both Android and iOS
-- ✅ **Versatile Video Compression** – Supports a variety of video formats
+- **Clean and Appealing UI** – Modern and intuitive design
+- **Easy to Navigate UX** – Smooth and user-friendly experience
+- **Cross-Platform Support** – Works on both Android and iOS
+- **Versatile Video Compression** – Supports a variety of video formats
 
-## 🚀 Getting Started
+
+## Install
+
+> [!IMPORTANT]
+> The app is still in beta/alpha! Expect bug.
+Download at [Release](https://github.com/tobycm/pressor/releases/latest)
+
+
+##  Building from source
 
 ### Prerequisites
 
 - [Flutter](https://flutter.dev/) (Latest stable version)
 - [Dart](https://dart.dev/)
-- A device or emulator (Android/iOS)
 
-### Running Locally
+ Clone this repository and run the following commands:
+ ```
+ flutter pub get
+ flutter build (ios/apk)
+ ```
 
-#### Step 1: Clone the Repository
 
-```sh
-git clone https://github.com/tobycm/pressor
-cd pressor
-```
+## Todo (Road map)
+- [x] Can install on both android an ios
+- [ ] Theme changer
+- [ ] Change the file type
+- [ ] Support for ios file apps.
+#### Will add more in the future! Feel free to do a pr/issue if you have any idea.
 
-#### Step 2: Install Dependencies
-
-```sh
-flutter pub get
-```
-
-#### Step 3: Run the App
-
-```sh
-flutter run
-```
-
-This will launch the app on your connected device or emulator.
-
-### (Optional) Build for Release
-
-#### Android
-
-```sh
-flutter build apk
-```
-
-#### iOS
-
-```sh
-flutter build ios
-```
-
-## 📚 Tech Stack
+## Tech Stack
 
 - [Flutter](https://flutter.dev/) – Cross-platform UI toolkit
 - [Dart](https://dart.dev/) – Programming language for Flutter
 - [FFmpeg](https://ffmpeg.org/) – Video processing backend
 
-## 📝 License
+##  License
 
-This project is licensed under the MIT License – see the [`LICENSE`](LICENSE) file for details.
+This project is licensed under the MIT License – see the [`LICENSE`](LICENSE.md) or
+```
+MIT License
+tobycm/pressor
+Copyright (c) 2025 @tobycm
 
-## 🤝 Contributions
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Any contributions are appreciated! Feel free to create an issue or pull request.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-## 🔗 Share this Project
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+##  Contributing
+Feel free to open pull request to contribute for this project!
 
-If you like this project, please give it a ⭐ and share it with your friends!
+## Disclosure
+ The project does use help with the use of AI.
+
+
+
 
