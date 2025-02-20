@@ -44,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(),
       body: page,
       bottomNavigationBar: BottomNavBar(
         setPage: (page) => {

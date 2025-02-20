@@ -32,36 +32,36 @@ class _SaveToState extends State<SaveTo> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Add a button to pick destination folder
-            if (!Platform.isIOS)
-              ElevatedButton(
-                style: BlueButton(context),
-                onPressed: () async {
-                  String? path = await FilesystemPicker.open(
-                    title: 'Folder to save compressed video',
-                    context: context,
-                    rootDirectory: Directory("/"),
-                    directory: Directory((Platform.isAndroid)
-                        ? '/storage/emulated/0/'
-                        : Platform.isLinux || Platform.isMacOS
-                            ? Platform.environment['HOME'] ?? "/home/"
-                            : "/"),
-                    fsType: FilesystemType.folder,
-                    pickText: 'Save results to this folder',
-                  );
+            ElevatedButton(
+              style: BlueButton(context),
+              onPressed: () async {
+                String? path = await FilesystemPicker.open(
+                  title: 'Folder to save compressed video',
+                  context: context,
+                  rootDirectory: Directory("/"),
+                  directory: Directory(Platform.isLinux || Platform.isMacOS
+                      ? Platform.environment['HOME'] ?? "/home/"
+                      : "/"),
+                  fsType: FilesystemType.folder,
+                  pickText: 'Save results to this folder',
+                );
 
-                  setState(() {
-                    widget.compressContext.destinationFolder = path;
-                  });
-                },
-                child: const Text('Pick destination folder',
-                    style: TextStyle(fontSize: 24)),
+                setState(() {
+                  widget.compressContext.destinationFolder = path;
+                });
+              },
+              child: const Text(
+                'Pick destination folder',
+                style: TextStyle(fontSize: 24),
               ),
+            ),
 
             if (widget.compressContext.destinationFolder != null) ...[
               Padding(padding: const EdgeInsets.all(10)),
               Text(
-                  'Destination folder: ${widget.compressContext.destinationFolder!.split("/").last}',
-                  style: TextStyle(fontSize: 24)),
+                'Destination folder: ${widget.compressContext.destinationFolder!.split("/").last}',
+                style: TextStyle(fontSize: 24),
+              ),
               Padding(padding: const EdgeInsets.all(10)),
               ElevatedButton(
                 style: BlueButton(context),

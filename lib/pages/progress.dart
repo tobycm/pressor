@@ -1,8 +1,7 @@
 import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_kit_config.dart';
-import 'package:ffmpeg_kit_flutter_full_gpl/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_full_gpl/return_code.dart';
-import 'package:ffmpeg_kit_flutter_full_gpl/session_state.dart';
 import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:pressor/compress.dart';
 
 enum CompressionState {
@@ -22,113 +21,120 @@ class CompressionProgress extends StatefulWidget {
 }
 
 class _CompressionProgressState extends State<CompressionProgress> {
+  // ignore: prefer_final_fields
   int _progress = 0;
-
-  CompressionState _state = CompressionState.pending;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
+    return FutureBuilder<ReturnCode?>(
       future: (() async {
-        setState(() {
-          _state = CompressionState.compressing;
-        });
+        // setState(() {
+        //   _state = CompressionState.compressing;
+        // });
 
-        var ffprobeSession = await FFprobeKit.execute(
-          '-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${widget.compressContext.video.path}"',
-        );
+        // var ffprobeSession = await FFprobeKit.execute(
+        //   '-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${widget.compressContext.video.path}"',
+        // );
 
-        var durationStr = await ffprobeSession.getOutput();
-        if (durationStr == null) {
-          return;
-        }
+        // var durationStr = await ffprobeSession.getOutput();
+        // if (durationStr == null) {
+        //   return;
+        // }
 
-        var duration = double.parse(durationStr);
+        // var duration = double.parse(durationStr);
+
+        // var session = await startCompressSession(
+        //   widget.compressContext,
+        //   (session) {
+        //     setState(() {
+        //       _progress = 100;
+        //       _state = CompressionState.completed;
+        //     });
+        //   },
+        //   (l) {
+        //     log("ffmpeg log: ${l.getMessage()}");
+        //   },
+        //   (stat) {
+        //     setState(() {
+        //       _progress = (stat.getTime() / duration * 100).ceil();
+        //       if (_progress > 100) {
+        //         _progress = 100;
+        //       }
+        //     });
+        //   },
+        // );
+
+        // // print(File(widget.compressContext.video.path)
+        // //     .existsSync()); // Should print true
+
+        // // print(session.getCommand());
+
+        // FFmpegKitConfig.ffmpegExecute(session);
+
+        // var code = await session.getReturnCode();
+        // if (code == null) {
+        //   return;
+        // }
+
+        // if (ReturnCode.isSuccess(code)) {
+        //   setState(() {
+        //     _state = CompressionState.completed;
+        //   });
+
+        //   await Gal.putVideo(widget.compressContext.outputPath());
+
+        //   return;
+        // }
+
+        // log('Compression failed with code $code');
+
+        // setState(() {
+        //   _state = CompressionState.errored;
+        // });
+
+        // return;
 
         var session = await startCompressSession(widget.compressContext);
 
-        print(session.getCommand());
-
-        FFmpegKitConfig.ffmpegExecute(session);
-
-        while (_progress < 100) {
-          await Future.delayed(const Duration(milliseconds: 100));
-
-          if (await session.getState() == SessionState.completed) {
-            var code = await session.getReturnCode();
-
-            if (ReturnCode.isSuccess(code)) {
-              setState(() {
-                _progress = 100;
-                _state = CompressionState.completed;
-              });
-              break;
-            } else {
-              print('Compression failed with code $code');
-              setState(() {
-                _state = CompressionState.errored;
-              });
-              break;
-            }
-          }
-
-          var stat = (await session.getStatistics()).first;
-          print("$duration / ${stat.getTime()}");
-
-          // setState(() {
-          //   _progress = (stat.getTime() / duration * 100).ceil();
-          // });
-        }
+        await FFmpegKitConfig.asyncFFmpegExecute(session);
 
         var code = await session.getReturnCode();
-        if (code == null) {
-          return;
-        }
 
-        if (ReturnCode.isSuccess(code)) {
-          setState(() {
-            _state = CompressionState.completed;
-          });
-        } else {
-          print('Compression failed with code $code');
-          // print(await session.getLogsAsString());
-          setState(() {
-            _state = CompressionState.errored;
-          });
-        }
+        await Gal.putVideo(widget.compressContext.outputPath());
 
-        return;
+        return code;
       })(),
       builder: (context, snapshot) => Scaffold(
-        appBar: _progress == 100
+        appBar: snapshot.connectionState == ConnectionState.done
             ? AppBar(
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                  },
+                  onPressed: () =>
+                      Navigator.popUntil(context, (route) => route.isFirst),
                 ),
-                title: const Text('Home',
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+                title: const Text(
+                  'Home',
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
               )
             : null,
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            if (_state == CompressionState.pending) ...[
+            if (snapshot.connectionState == ConnectionState.none) ...[
               CircularProgressIndicator(),
               Text(
                 'Starting compression...',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
-            if (_state == CompressionState.compressing) ...[
+            if (snapshot.connectionState == ConnectionState.waiting) ...[
               CircularProgressIndicator(value: _progress / 100),
               Text(
                 'Progress: $_progress%',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
-            if (_state == CompressionState.completed) ...[
+            if (snapshot.connectionState == ConnectionState.done) ...[
               Icon(
                 Icons.check_circle,
                 color: Colors.white,
@@ -139,14 +145,14 @@ class _CompressionProgressState extends State<CompressionProgress> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
-            if (_state == CompressionState.errored) ...[
+            if (snapshot.hasError) ...[
               Icon(
                 Icons.error,
                 color: Colors.white,
                 size: 48,
               ),
               Text(
-                'Compression failed',
+                'Compression failed: ${snapshot.error}',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
