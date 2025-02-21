@@ -4,22 +4,22 @@
 
 A powerful yet easy-to-use video compression app built with Flutter.
 
-## Features
+## 🌟 Features
 
-- **Clean and Appealing UI** – Modern and intuitive design
-- **Easy to Navigate UX** – Smooth and user-friendly experience
-- **Cross-Platform Support** – Works on both Android and iOS
-- **Versatile Video Compression** – Supports a variety of video formats
+- ✅ **Clean and Appealing UI** – Modern and intuitive design
+- ✅ **Easy to Navigate UX** – Smooth and user-friendly experience
+- ✅ **Cross-Platform Support** – Works on both Android and iOS
+- ✅ **Versatile Video Compression** – Supports a variety of video formats
 
 
-## Install
+## ⚙ Install
 
 > [!IMPORTANT]
 > The app is still in beta/alpha! Expect bug.
 Download at [Release](https://github.com/tobycm/pressor/releases/latest)
 
 
-##  Building from source
+## 🔨 Building from source
 
 ### Prerequisites
 
@@ -33,22 +33,22 @@ Download at [Release](https://github.com/tobycm/pressor/releases/latest)
  ```
 
 
-## Todo (Road map)
+## 🗺️ Todo (Road map)
 - [x] Can install on both android an ios
 - [ ] Theme changer
 - [ ] Change the file type
 - [ ] Support for ios file apps.
 #### Will add more in the future! Feel free to do a pr/issue if you have any idea.
 
-## Tech Stack
+## 📚 Tech Stack
 
 - [Flutter](https://flutter.dev/) – Cross-platform UI toolkit
 - [Dart](https://dart.dev/) – Programming language for Flutter
 - [FFmpeg](https://ffmpeg.org/) – Video processing backend
 
-##  License
+## 📝 License
 
-This project is licensed under the MIT License – see the [`LICENSE`](LICENSE.md) or
+This project is licensed under the MIT License – see the [`LICENSE`](LICENSE) or
 ```
 MIT License
 tobycm/pressor
@@ -72,10 +72,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-##  Contributing
+## 🤝 Contributions
 Feel free to open pull request to contribute for this project!
 
-## Disclosure
+## 🎇Disclosure
  The project does use help with the use of AI.
 
 
