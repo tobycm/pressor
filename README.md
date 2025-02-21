@@ -48,7 +48,7 @@ Download at [Release](https://github.com/tobycm/pressor/releases/latest)
 
 ## 📝 License
 
-This project is licensed under the MIT License – see the [`LICENSE`](LICENSE) or
+This project is licensed under the MIT License – see the [`LICENSE`](https://github.com/tobycm/pressor/blob/main/LICENSE) or
 ```
 MIT License
 tobycm/pressor
