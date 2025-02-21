@@ -10,6 +10,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-3.27.3
+
       # Install flutter
       - name: Flutter get
         uses: subosito/flutter-action@v2
@@ -18,18 +24,6 @@ jobs:
 
       # Install your project's dependencies
       - run: flutter pub get
-
-      - name: Setup CocoaPods
-        run: |
-          sudo gem install cocoapods
-          sudo gem update cocoapods
-
-      - name: Install CocoaPods dependencies
-        run: |
-          cd ios
-          pod setup
-          pod cache clean --all
-          pod install --repo-update
 
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
