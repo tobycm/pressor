@@ -1,0 +1,71 @@
+name: "[DEV] Build and Publish"
+on: workflow_dispatch
+
+jobs:
+  # Build job
+  build:
+    runs-on: macos-latest
+    steps:
+      # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-3.27.3
+
+      # Install flutter
+      - name: Flutter get
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.3"
+      # Clean the flutter cache
+      - run: flutter clean 
+      # Install your project's dependencies
+      - run: flutter pub get
+       
+      # Build the android apk
+      - name: Building APK
+        run: flutter build android --release
+      # Build the ipa without signing the code using a single flutter command
+      - name: Building IPA
+        run: flutter build ipa --release --no-codesign
+
+      - name: Create artifacts folder
+        run: mkdir -p Payload
+
+      - name: Copy the ipa to the artifacts folder
+        run: cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app Payload/
+
+      - name: Zip artifact folder
+        run: zip -r artifacts.zip Payload/
+
+      - name: Rename the zip file
+        run: mv artifacts.zip Pressor.ipa
+
+      # Collect the file and upload as artifact
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-ipa
+          # Path to the release files
+          path: Pressor.ipa
+      - name: collect apk artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-ipa
+          # Path to the release files
+          path: /build/flutter/*
+      # Upload the artifact to github automatically with verson tag as version.
+      - name: Upload the ipa to github and show message as commit message with tag version.
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          token: ${{ secrets.github_token }}
+          body: |
+            Changes in this release:
+            ${{ github.event.head_commit.message }}
+          files: |
+            Pressor.ipa
