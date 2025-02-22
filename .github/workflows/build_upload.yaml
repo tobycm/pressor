@@ -28,7 +28,7 @@ jobs:
        
       # Build the android apk
       - name: Building APK
-        run: flutter build android --release
+        run: flutter build apk --release 
       # Build the ipa without signing the code using a single flutter command
       - name: Building IPA
         run: flutter build ipa --release --no-codesign
