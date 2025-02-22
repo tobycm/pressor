@@ -55,7 +55,7 @@ jobs:
       - name: collect apk artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-ipa
+          name: release-apk
           # Path to the release files
           path: build/app/outputs/flutter-apk/*.apk
       # Upload the artifact to github automatically with verson tag as version.
