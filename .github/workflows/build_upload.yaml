@@ -6,30 +6,28 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+      
       # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
       - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v4
-        with:
-          path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.OS }}-flutter-install-cache-3.27.3
-
+        uses: actions/checkout@v4
+      
       # Install flutter
       - name: Flutter get
         uses: subosito/flutter-action@v2
         with:
+          channel: stable
           flutter-version: "3.27.3"
+          cache: true
       # Clean the flutter cache
-      - run: flutter clean 
+      - run: flutter clean
+      
       # Install your project's dependencies
       - run: flutter pub get
-       
+
       # Build the android apk
       - name: Building APK
         run: flutter build apk --release 
-      # Build the ipa without signing the code using a single flutter command
+      # Build the ipa without signing the code using a single flutter command and zip it to a single ipa file.
       - name: Building IPA
         run: flutter build ipa --release --no-codesign
 
@@ -50,14 +48,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-ipa
-          # Path to the release files
+          # Path to the ios release ipa files
           path: Pressor.ipa
+      
       - name: collect apk artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          # Path to the release files
+          # Path to the android release apk files
           path: build/app/outputs/flutter-apk/*.apk
+      
       # Upload the artifact to github automatically with verson tag as version.
       - name: Upload the ipa to github and show message as commit message with tag version.
         uses: softprops/action-gh-release@v2
@@ -69,3 +69,4 @@ jobs:
             ${{ github.event.head_commit.message }}
           files: |
             Pressor.ipa
+            build/app/outputs/flutter-apk/*.apk
