@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pressor/compress.dart';
 import 'package:pressor/models/compress_settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DefaultSettingsPage extends StatefulWidget {
   final DefaultSettings settings = DefaultSettings();
@@ -9,6 +10,22 @@ class DefaultSettingsPage extends StatefulWidget {
 
   @override
   State<DefaultSettingsPage> createState() => _DefaultSettingsPageState();
+
+  Future<void> saveSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (settings.resolution != null) {
+      prefs.setString("default_resolution", settings.resolution!.toString());
+    }
+
+    if (settings.bitrate != null) {
+      prefs.setInt("default_bitrate", settings.bitrate!);
+    }
+
+    if (settings.fps != null) {
+      prefs.setInt("default_fps", settings.fps!);
+    }
+  }
 }
 
 class _DefaultSettingsPageState extends State<DefaultSettingsPage> {
