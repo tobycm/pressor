@@ -71,10 +71,12 @@ class _DefaultSettingsPageState extends State<DefaultSettingsPage> {
                           ),
                         )
                       ],
-                      onChanged: (resolution) => {
+                      onChanged: (resolution) {
                         setState(() {
                           widget.settings.resolution = resolution;
-                        })
+                        });
+
+                        widget.saveSettings();
                       },
                     ),
                   ],
@@ -90,6 +92,8 @@ class _DefaultSettingsPageState extends State<DefaultSettingsPage> {
                       widget.settings.fps =
                           value.toInt() == 0 ? null : value.toInt();
                     });
+
+                    widget.saveSettings();
                   },
                 ),
                 Padding(padding: const EdgeInsets.all(10)),
@@ -104,6 +108,8 @@ class _DefaultSettingsPageState extends State<DefaultSettingsPage> {
                       widget.settings.bitrate =
                           value == 1000 ? null : value.toInt();
                     });
+
+                    widget.saveSettings();
                   },
                 ),
               ],

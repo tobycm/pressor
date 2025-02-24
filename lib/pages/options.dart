@@ -5,6 +5,7 @@ import 'package:pressor/components/buttons/blue.dart';
 import 'package:pressor/compress.dart';
 import 'package:pressor/pages/save_to.dart';
 import 'package:pressor/pages/summary.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CompressOptions extends StatefulWidget {
   final CompressContext compressContext;
@@ -16,6 +17,29 @@ class CompressOptions extends StatefulWidget {
 }
 
 class _CompressOptionsState extends State<CompressOptions> {
+  @override
+  void initState() {
+    super.initState();
+    _loadDefaultSettings();
+  }
+
+  void _loadDefaultSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.containsKey("default_resolution")) {
+      widget.compressContext.settings.resolution =
+          resolutions[prefs.getString("default_resolution")!];
+    }
+
+    if (prefs.containsKey("default_bitrate")) {
+      widget.compressContext.settings.bitrate = prefs.getInt("default_bitrate");
+    }
+
+    if (prefs.containsKey("default_fps")) {
+      widget.compressContext.settings.fps = prefs.getInt("default_fps");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,26 +140,6 @@ class _CompressOptionsState extends State<CompressOptions> {
                       context,
                       MaterialPageRoute(builder: (context) => to),
                     );
-
-                    // if (!Platform.isIOS) {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           SaveTo(compressContext: widget.compressContext),
-                    //     ),
-                    //   );
-                    // } else {
-                    //   widget.compressContext.destinationFolder =
-                    //       Directory.systemTemp.path;
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           Review(compressContext: widget.compressContext),
-                    //     ),
-                    //   );
-                    // }
                   },
                   style: BlueButton(context),
                   child: const Text('Next', style: TextStyle(fontSize: 24)),
