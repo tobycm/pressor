@@ -21,91 +21,47 @@ class CompressionProgress extends StatefulWidget {
 }
 
 class _CompressionProgressState extends State<CompressionProgress> {
-  // ignore: prefer_final_fields
   int _progress = 0;
+  ReturnCode? _returnCode;
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<ReturnCode?>(
-      future: (() async {
-        // setState(() {
-        //   _state = CompressionState.compressing;
-        // });
+  void initState() {
+    super.initState();
+    _startCompression();
+  }
 
-        // var ffprobeSession = await FFprobeKit.execute(
-        //   '-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${widget.compressContext.video.path}"',
-        // );
+  Future<ReturnCode?> _startCompression() async {
+    var session = await startCompressSession(
+      widget.compressContext,
+      (session) {
+        // completed
+      },
+      (log) {},
+      (statistics) {
+        setState(() {
+          _progress = (statistics.getTime() / 1000).toInt();
+        });
+      },
+    );
 
-        // var durationStr = await ffprobeSession.getOutput();
-        // if (durationStr == null) {
-        //   return;
-        // }
+    await FFmpegKitConfig.asyncFFmpegExecute(session);
 
-        // var duration = double.parse(durationStr);
+    var code = await session.getReturnCode();
 
-        // var session = await startCompressSession(
-        //   widget.compressContext,
-        //   (session) {
-        //     setState(() {
-        //       _progress = 100;
-        //       _state = CompressionState.completed;
-        //     });
-        //   },
-        //   (l) {
-        //     log("ffmpeg log: ${l.getMessage()}");
-        //   },
-        //   (stat) {
-        //     setState(() {
-        //       _progress = (stat.getTime() / duration * 100).ceil();
-        //       if (_progress > 100) {
-        //         _progress = 100;
-        //       }
-        //     });
-        //   },
-        // );
+    if (ReturnCode.isSuccess(code)) {
+      await Gal.putVideo(widget.compressContext.outputPath());
+    }
 
-        // // print(File(widget.compressContext.video.path)
-        // //     .existsSync()); // Should print true
+    setState(() {
+      _returnCode = code;
+    });
 
-        // // print(session.getCommand());
+    return code;
+  }
 
-        // FFmpegKitConfig.ffmpegExecute(session);
-
-        // var code = await session.getReturnCode();
-        // if (code == null) {
-        //   return;
-        // }
-
-        // if (ReturnCode.isSuccess(code)) {
-        //   setState(() {
-        //     _state = CompressionState.completed;
-        //   });
-
-        //   await Gal.putVideo(widget.compressContext.outputPath());
-
-        //   return;
-        // }
-
-        // log('Compression failed with code $code');
-
-        // setState(() {
-        //   _state = CompressionState.errored;
-        // });
-
-        // return;
-
-        var session = await startCompressSession(widget.compressContext);
-
-        await FFmpegKitConfig.asyncFFmpegExecute(session);
-
-        var code = await session.getReturnCode();
-
-        await Gal.putVideo(widget.compressContext.outputPath());
-
-        return code;
-      })(),
-      builder: (context, snapshot) => Scaffold(
-        appBar: snapshot.connectionState == ConnectionState.done
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: _progress == 100
             ? AppBar(
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
@@ -120,21 +76,21 @@ class _CompressionProgressState extends State<CompressionProgress> {
             : null,
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            if (snapshot.connectionState == ConnectionState.none) ...[
+            if (_progress == 0) ...[
               CircularProgressIndicator(),
               Text(
                 'Starting compression...',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
-            if (snapshot.connectionState == ConnectionState.waiting) ...[
+            if (_progress != 0 && _progress != 100) ...[
               CircularProgressIndicator(value: _progress / 100),
               Text(
                 'Progress: $_progress%',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
-            if (snapshot.connectionState == ConnectionState.done) ...[
+            if (_progress == 100) ...[
               Icon(
                 Icons.check_circle,
                 color: Colors.white,
@@ -145,20 +101,18 @@ class _CompressionProgressState extends State<CompressionProgress> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
-            if (snapshot.hasError) ...[
+            if (!ReturnCode.isSuccess(_returnCode)) ...[
               Icon(
                 Icons.error,
                 color: Colors.white,
                 size: 48,
               ),
               Text(
-                'Compression failed: ${snapshot.error}',
+                'Compression failed: Error: ${_returnCode?.toString()}',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
             ],
           ]),
         ),
-      ),
-    );
-  }
+      );
 }

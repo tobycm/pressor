@@ -75,14 +75,9 @@ Future<FFmpegSession> startCompressSession(CompressContext context,
     LogCallback? logCallback,
     StatisticsCallback? statisticsCallback,
     LogRedirectionStrategy? logRedirectionStrategy]) async {
-  // return await FFmpegSession.create([
-  //   "-version",
-  // ]);
-
   return await FFmpegSession.create([
     "-y",
     "-i",
-    // '"${context.video.path}"',
     context.video.path,
     if (context.settings.resolution != null) ...[
       "-vf",
@@ -96,7 +91,6 @@ Future<FFmpegSession> startCompressSession(CompressContext context,
       "-r",
       "${context.settings.fps}",
     ],
-    // '"${context.outputName()}"',
     context.outputPath(),
   ], completeCallback, logCallback, statisticsCallback, logRedirectionStrategy);
 }
