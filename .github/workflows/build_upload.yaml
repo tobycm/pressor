@@ -1,9 +1,22 @@
 name: "[DEV] Build and Publish"
-on: workflow_dispatch
+on:
+#If push come with tag that start with v (eg: v1.3.2,vBETA-0.1.1,etc...)
+ push:
+    tags:
+     - v*
+
+#Run on pr on the main branches.
+ pull_request:
+    branches:
+     - main
+
+#This is pretty self explainatory :bruh:     
+ workflow_dispatch:
 
 jobs:
   # Build job
   build:
+   #Type of machine(we running on macos cuz we like to waste our hour(NotPoggo))
     runs-on: macos-latest
     steps:
       
@@ -24,7 +37,7 @@ jobs:
       # Install your project's dependencies
       - run: flutter pub get
 
-      # Build the android apk
+      # Build the android apk (please remind me to split the android apk to another workflow later cuz of crazy charge on macos actions.)
       - name: Building APK
         run: flutter build apk --release 
       # Build the ipa without signing the code using a single flutter command and zip it to a single ipa file.
