@@ -1,0 +1,35 @@
+name: "[DEV] Build Android APK"
+on: workflow_dispatch
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install flutter
+      - name: Flutter get
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.3"
+          cache: true
+      
+      #Since this is cached, might cause some issue so might as well just add this.
+      - run: flutter clean
+         
+      # Install your project's dependencies
+      - run: flutter pub get
+
+      # Build and sign the ipa using a single flutter command
+      - name: Building Apk file
+        run: flutter build  --release
+      # Collect the file and upload as artifact
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          # Path to the release files
+          path: build/app/outputs/flutter-apk/*.apk
