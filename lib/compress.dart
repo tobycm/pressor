@@ -52,7 +52,7 @@ class Resolution {
 
 
 const Map<String, Resolution> resolutions = {
-  '1440p': Resolution('1440p', 2560, 1440)
+  '1440p': Resolution('1440p', 2560, 1440),
   '1080p': Resolution('1080p', 1920, 1080),
   '720p': Resolution('720p', 1280, 720),
   '480p': Resolution('480p', 854, 480),
