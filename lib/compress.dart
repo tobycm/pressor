@@ -26,9 +26,9 @@ class CompressContext {
     if (settings.fps != null) {
       output += "_${settings.fps}fps";
     }
-
+    
     output += ".mp4";
-
+    
     return output;
   }
 
@@ -50,7 +50,9 @@ class Resolution {
   String toString() => name;
 }
 
+
 const Map<String, Resolution> resolutions = {
+  '1440p': Resolution('1440p', 2560, 1440)
   '1080p': Resolution('1080p', 1920, 1080),
   '720p': Resolution('720p', 1280, 720),
   '480p': Resolution('480p', 854, 480),
@@ -90,6 +92,10 @@ Future<FFmpegSession> startCompressSession(CompressContext context,
     if (context.settings.fps != null) ...[
       "-r",
       "${context.settings.fps}",
+    ],
+    ...[
+      "-c:v",
+      "mpeg4",
     ],
     context.outputPath(),
   ], completeCallback, logCallback, statisticsCallback, logRedirectionStrategy);
