@@ -1,0 +1,85 @@
+name: "[DEV] Build and Publish"
+on:
+#If push come with tag that start with v (eg: v1.3.2,vBETA-0.1.1,etc...)
+ push:
+    tags:
+     - v*
+
+#Run on pr on the main branches.
+ pull_request:
+    branches:
+     - main
+
+#This is pretty self explainatory :bruh:     
+ workflow_dispatch:
+
+jobs:
+  # Build job
+  build:
+   #Type of machine(we running on macos cuz we like to waste our hour(NotPoggo))
+    runs-on: macos-latest
+    steps:
+      
+      # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Install flutter
+      - name: Flutter get
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.27.3"
+          cache: true
+      # Clean the flutter cache
+      - run: flutter clean
+      
+      # Install your project's dependencies
+      - run: flutter pub get
+
+      # Build the android apk (please remind me to split the android apk to another workflow later cuz of crazy charge on macos actions.)
+      - name: Building APK
+        run: flutter build apk --release 
+      # Build the ipa without signing the code using a single flutter command and zip it to a single ipa file.
+      - name: Building IPA
+        run: flutter build ipa --release --no-codesign
+
+      - name: Create artifacts folder
+        run: mkdir -p Payload
+
+      - name: Copy the ipa to the artifacts folder
+        run: cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app Payload/
+
+      - name: Zip artifact folder
+        run: zip -r artifacts.zip Payload/
+
+      - name: Rename the zip file
+        run: mv artifacts.zip Pressor.ipa
+
+      # Collect the file and upload as artifact
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa
+          # Path to the ios release ipa files
+          path: Pressor.ipa
+      
+      - name: collect apk artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          # Path to the android release apk files
+          path: build/app/outputs/flutter-apk/*.apk
+      
+      # Upload the artifact to github automatically with verson tag as version.
+      - name: Upload the ipa to github and show message as commit message with tag version.
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          token: ${{ secrets.github_token }}
+          body: |
+            Changes in this release:
+            ${{ github.event.head_commit.message }}
+          files: |
+            Pressor.ipa
+            build/app/outputs/flutter-apk/*.apk

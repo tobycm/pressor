@@ -36,7 +36,7 @@ Download at [Release](https://github.com/tobycm/pressor/releases/latest)
 ## 🗺️ Todo (Road map)
 - [x] Can install on both android an ios
 - [ ] Theme changer
-- [ ] Change the file type
+- [ ] Change the file type/support for more file type.
 - [ ] Support for ios file apps.
 #### Will add more in the future! Feel free to do a pr/issue if you have any idea.
 

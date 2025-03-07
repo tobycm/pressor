@@ -1,10 +1,10 @@
-name: "[DEV] Build and Publish iOS"
+name: "[DEV] Build Android APK"
 on: workflow_dispatch
 
 jobs:
   # Build job
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
       - name: Checkout repository
@@ -24,25 +24,12 @@ jobs:
       - run: flutter pub get
 
       # Build and sign the ipa using a single flutter command
-      - name: Building IPA
-        run: flutter build ipa --release --no-codesign
-
-      - name: Create artifacts folder
-        run: mkdir -p Payload
-
-      - name: Copy the ipa to the artifacts folder
-        run: cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app Payload/
-
-      - name: Zip artifact folder
-        run: zip -r artifacts.zip Payload/
-
-      - name: Rename the zip file
-        run: mv artifacts.zip Pressor.ipa
-
+      - name: Building Apk file
+        run: flutter build  --release
       # Collect the file and upload as artifact
       - name: collect ipa artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-ipa
+          name: release-apk
           # Path to the release files
-          path: Pressor.ipa
+          path: build/app/outputs/flutter-apk/*.apk
